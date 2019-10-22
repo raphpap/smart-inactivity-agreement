@@ -8,7 +8,7 @@ const LinkToken = artifacts.require('LinkToken')
   can be retrieved by calling the withdrawLink() function.
 */
 
-const payment = process.env.TRUFFLE_CL_BOX_PAYMENT || '1000000000000000000'
+const payment = '1000000000000000000'
 
 module.exports = async callback => {
   const mc = await MyContract.deployed()

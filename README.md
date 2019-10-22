@@ -8,6 +8,9 @@ Basically, a Dapp would allow users to "stake" $20 worth of ETH as a promise tha
 
 In v1, users will simply lose their collateral if they don't respect their agreement.
 
+## Environment variables
+
+See `.env.example`
 
 ## Requirements
 
@@ -33,18 +36,12 @@ npm run migrate:live
 
 ## Helper Scripts
 
-
 ```bash
-To fund the contract
-npx truffle exec scripts/fund-contract.js --network live
+To request the uptime and then transfer the funds if necessary
+npx truffle exec scripts/request-uptime.js --network live
 ```
 
 ```bash
-To request the datsa
-npx truffle exec scripts/request-data.js --network live
-```
-
-```bash
-After waiting at least 3 blocks, this will read the price
-npx truffle exec scripts/read-contract.js --network live
+After waiting at least 3 blocks, this will read the latest uptime
+npx truffle exec scripts/read-uptime.js --network live
 ```
