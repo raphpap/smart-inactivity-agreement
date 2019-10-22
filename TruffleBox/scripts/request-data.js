@@ -1,4 +1,4 @@
-const MyContract = artifacts.require('MyContract')
+const InactivityContract = artifacts.require('InactivityContract')
 
 /*
   This script allows for a Chainlink request to be created from
@@ -14,7 +14,7 @@ const clientAddress = process.env.TRUFFLE_CL_BOX_CLIENT_ADDRESS;
 const serviceProviderAddress = process.env.TRUFFLE_CL_BOX_SERVICE_PROVIDER_ADDRESS;
 
 module.exports = async callback => {
-  const mc = await MyContract.deployed();
+  const mc = await InactivityContract.deployed();
   console.log('Creating request on contract:', mc.address);
 
   const tx = await mc.requestUptime(
