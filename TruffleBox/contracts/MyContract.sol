@@ -2,7 +2,7 @@ pragma solidity 0.4.24;
 
 import "chainlink/contracts/ChainlinkClient.sol";
 
-contract MyContract is ChainlinkClient {
+contract InactivityContract is ChainlinkClient {
   uint256 constant public uptimeThreshold = 9999; // solhint-disable-line const-name-snakecase
   uint256 public endAt;
   address public client;

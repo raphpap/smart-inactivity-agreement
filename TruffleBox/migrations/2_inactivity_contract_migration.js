@@ -1,4 +1,4 @@
-let MyContract = artifacts.require('MyContract')
+let InactivityContract = artifacts.require('InactivityContract')
 let LinkToken = artifacts.require('LinkToken')
 let Oracle = artifacts.require('Oracle')
 
@@ -8,12 +8,12 @@ module.exports = (deployer, network) => {
   if (!network.startsWith('live')) {
     deployer.deploy(LinkToken).then(() => {
       return deployer.deploy(Oracle, LinkToken.address).then(() => {
-        return deployer.deploy(MyContract, LinkToken.address)
+        return deployer.deploy(InactivityContract, LinkToken.address)
       })
     })
   } else {
     // For live networks, use the 0 address to allow the ChainlinkRegistry
     // contract automatically retrieve the correct address for you
-    deployer.deploy(MyContract, '0x0000000000000000000000000000000000000000', { value: 100000000000000000 })
+    deployer.deploy(InactivityContract, '0x0000000000000000000000000000000000000000', { value: 100000000000000000 })
   }
 }
