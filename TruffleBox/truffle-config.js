@@ -1,5 +1,11 @@
 const HDWalletProvider = require('truffle-hdwallet-provider')
 
+const private_keys = [
+  process.env.CONTRACT_OWNER_PK,
+  process.env.CLIENT_1_PK,
+  process.env.CLIENT_2_PK
+];
+
 module.exports = {
   networks: {
     cldev: {
@@ -9,7 +15,7 @@ module.exports = {
     },
     live: {
       provider: () => {
-        return new HDWalletProvider(process.env.MNEMONIC, process.env.RPC_URL)
+        return new HDWalletProvider(private_keys, process.env.RPC_URL, 0, 3)
       },
       network_id: '3',
     },

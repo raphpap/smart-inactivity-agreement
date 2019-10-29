@@ -3,15 +3,13 @@ pragma solidity 0.4.24;
 import "chainlink/contracts/ChainlinkClient.sol";
 
 contract InactivityContract is ChainlinkClient {
-  uint256 constant public uptimeThreshold = 9999; // solhint-disable-line const-name-snakecase
-  uint256 public endAt;
-  address public client;
-  address public serviceProvider;
-  uint256 public data;
+  address constant public outgoingAddress = 0x31DAF11283dba5DB6029f465924e1528dFf35c5f;
+  uint256 constant public latestPost = 1459289773000;
+  address public clientAddress;
+  uint256 public clientEndAt;
+  uint256 public clientLatestSaved;
 
   constructor(address _link) public payable {
-    endAt = block.timestamp.add(5 minutes);
-
     if (_link == address(0)) {
       setPublicChainlinkToken();
     } else {
@@ -27,35 +25,37 @@ contract InactivityContract is ChainlinkClient {
     address _oracle,
     bytes32 _jobId,
     uint256 _payment,
-    string _url,
-    address _client,
-    address _serviceProvider,
-    string _fbClientId,
+    address _clientAddress,
+    string _clientFbId,
     string _encryptedFbAccessToken
   )
     public
+    payable
     returns (bytes32 requestId)
   {
-    client = _client;
-    serviceProvider = _serviceProvider;
+    clientAddress = _clientAddress;
 
     Chainlink.Request memory req = buildChainlinkRequest(_jobId, this, this.fulfill.selector);
     req.add("copyPath", "latest");
-    req.add("clientId", _fbClientId);
+    req.add("clientId", _clientFbId);
     req.add("encryptedAccessToken", _encryptedFbAccessToken);
 
     requestId = sendChainlinkRequestTo(_oracle, req, _payment);
   }
 
-  function fulfill(bytes32 _requestId, uint256 _data)
+  function fulfill(bytes32 _requestId, uint256 _latestActivity)
     public
     recordChainlinkFulfillment(_requestId)
   {
-    data = _data;
-    if (_data < uptimeThreshold) {
-     client.transfer(address(this).balance);
-    } else if (block.timestamp >= endAt) { // solhint-disable-line not-rely-on-time
-     serviceProvider.transfer(address(this).balance);
+    if (clientLatestSaved == 0) { // First time fulfilling for this client
+      clientEndAt = block.timestamp.add(5 minutes);
+      clientLatestSaved = _latestActivity;
+    }
+
+    if (_latestActivity > latestPost) { // user has more recent activity
+     outgoingAddress.transfer(address(this).balance); // he loses his collateral
+    } else if (block.timestamp >= clientEndAt) { // contract is over
+     clientAddress.transfer(address(this).balance); // he gets his balance back
     }
   }
 }
