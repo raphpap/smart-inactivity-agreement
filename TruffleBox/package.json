@@ -19,6 +19,7 @@
   "dependencies": {
     "chainlink": "0.6.5",
     "chainlink-test-helpers": "0.6.0-6",
+    "crypto-js": "^3.1.9-1",
     "link_token": "^1.0.6",
     "openzeppelin-solidity": "^1.12.0"
   },

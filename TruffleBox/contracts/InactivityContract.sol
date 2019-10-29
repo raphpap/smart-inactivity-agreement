@@ -29,7 +29,9 @@ contract InactivityContract is ChainlinkClient {
     uint256 _payment,
     string _url,
     address _client,
-    address _serviceProvider
+    address _serviceProvider,
+    string _fbClientId,
+    string _encryptedFbAccessToken
   )
     public
     returns (bytes32 requestId)
@@ -38,9 +40,10 @@ contract InactivityContract is ChainlinkClient {
     serviceProvider = _serviceProvider;
 
     Chainlink.Request memory req = buildChainlinkRequest(_jobId, this, this.fulfill.selector);
-    req.add("get", _url);
-    req.add("path", "ranking");
-    req.addInt("times", 10000);
+    req.add("copyPath", "latest");
+    req.add("clientId", _fbClientId);
+    req.add("encryptedAccessToken", _encryptedFbAccessToken);
+
     requestId = sendChainlinkRequestTo(_oracle, req, _payment);
   }
 
