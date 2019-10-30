@@ -3,11 +3,45 @@ pragma solidity 0.4.24;
 import "chainlink/contracts/ChainlinkClient.sol";
 
 contract InactivityContract is ChainlinkClient {
+  address ORACLE = 0xa1de4e226648c15f4bd514219f054aafee4b78d8;
+  bytes32 JOB_ID = 0x3935316435306135643430383462666539613664623830373730626639666564;
+  uint256 PAYMENT = 1000000000000000000;
+
   address constant public outgoingAddress = 0x31DAF11283dba5DB6029f465924e1528dFf35c5f;
-  uint256 constant public latestPost = 1459289773000;
-  address public clientAddress;
-  uint256 public clientEndAt;
-  uint256 public clientLatestSaved;
+
+  struct FbUser {
+    string clientFbId;
+    string encryptedFbAccessToken;
+    address clientAddress;
+    uint256 clientBalance;
+    uint256 clientEndAt;
+    uint256 clientLatestSaved;
+    bool activeContract;
+    bool exists;
+  }
+
+  // Number of active users in the contract
+  uint public nbActiveUsers = 0;
+  // Mapping of requestId => clientFbId
+  mapping (bytes32 => string) clientFbIdForRequestId;
+  // List of clientFbIds
+  string[] public fbUsers;
+  // Mapping of clientFbId => FbUser
+  mapping (string => FbUser) fbUserStructs;
+
+  function createFbUser(
+    string clientFbId,
+    string encryptedFbAccessToken,
+    address clientAddress,
+    uint clientBalance
+  ) private {
+    fbUserStructs[clientFbId].encryptedFbAccessToken = encryptedFbAccessToken;
+    fbUserStructs[clientFbId].clientAddress = clientAddress;
+    fbUserStructs[clientFbId].clientBalance = clientBalance;
+    fbUserStructs[clientFbId].activeContract = false;
+    fbUserStructs[clientFbId].exists = true;
+    fbUsers.push(clientFbId);
+  }
 
   constructor(address _link) public payable {
     if (_link == address(0)) {
@@ -21,11 +55,7 @@ contract InactivityContract is ChainlinkClient {
     return chainlinkTokenAddress();
   }
 
-  function requestUptime(
-    address _oracle,
-    bytes32 _jobId,
-    uint256 _payment,
-    address _clientAddress,
+  function registerUser(
     string _clientFbId,
     string _encryptedFbAccessToken
   )
@@ -33,29 +63,91 @@ contract InactivityContract is ChainlinkClient {
     payable
     returns (bytes32 requestId)
   {
-    clientAddress = _clientAddress;
+    require(fbUserStructs[_clientFbId].exists == false);
+    require(msg.value > 0);
 
-    Chainlink.Request memory req = buildChainlinkRequest(_jobId, this, this.fulfill.selector);
+    Chainlink.Request memory req = buildChainlinkRequest(JOB_ID, this, this.fulfillRegistration.selector);
     req.add("copyPath", "latest");
     req.add("clientId", _clientFbId);
     req.add("encryptedAccessToken", _encryptedFbAccessToken);
 
-    requestId = sendChainlinkRequestTo(_oracle, req, _payment);
+    requestId = sendChainlinkRequestTo(ORACLE, req, PAYMENT);
+    clientFbIdForRequestId[requestId] = _clientFbId;
+
+    createFbUser(
+      _clientFbId,
+      _encryptedFbAccessToken,
+      msg.sender,
+      msg.value
+    );
   }
 
-  function fulfill(bytes32 _requestId, uint256 _latestActivity)
+  function fulfillRegistration(bytes32 _requestId, uint256 _latestActivity)
     public
     recordChainlinkFulfillment(_requestId)
   {
-    if (clientLatestSaved == 0) { // First time fulfilling for this client
-      clientEndAt = block.timestamp.add(5 minutes);
-      clientLatestSaved = _latestActivity;
-    }
+    // Use the request id to retrive the user struct in 2 steps
+    string clientFbId = clientFbIdForRequestId[_requestId];
+    FbUser user = fbUserStructs[clientFbId];
 
-    if (_latestActivity > latestPost) { // user has more recent activity
-     outgoingAddress.transfer(address(this).balance); // he loses his collateral
-    } else if (block.timestamp >= clientEndAt) { // contract is over
-     clientAddress.transfer(address(this).balance); // he gets his balance back
+    // Remove the clientFbIdForRequestId mapping since we don't need it anymore
+    delete(clientFbIdForRequestId[_requestId]);
+
+    // Store the rest of the info
+    user.clientEndAt = block.timestamp.add(5 minutes);
+    user.clientLatestSaved = _latestActivity;
+    user.activeContract = true;
+    nbActiveUsers++;
+  }
+
+  function updateUser(
+    string _clientFbId
+  )
+    public
+    returns (bytes32 requestId)
+  {
+    FbUser user = fbUserStructs[_clientFbId];
+    require(user.exists == true);
+
+    Chainlink.Request memory req = buildChainlinkRequest(JOB_ID, this, this.fulfillUpdate.selector);
+    req.add("copyPath", "latest");
+    req.add("clientId", _clientFbId);
+    req.add("encryptedAccessToken", user.encryptedFbAccessToken);
+
+    requestId = sendChainlinkRequestTo(ORACLE, req, PAYMENT);
+    clientFbIdForRequestId[requestId] = _clientFbId;
+  }
+
+  function fulfillUpdate(bytes32 _requestId, uint256 _latestActivity)
+    public
+    recordChainlinkFulfillment(_requestId)
+  {
+    // Use the request id to retrive the user struct in 2 steps
+    string clientFbId = clientFbIdForRequestId[_requestId];
+    FbUser user = fbUserStructs[clientFbId];
+
+    // Remove the clientFbIdForRequestId mapping since we don't need it anymore
+    delete(clientFbIdForRequestId[_requestId]);
+
+    if (_latestActivity > user.clientLatestSaved) { // user has more recent activity
+      user.activeContract = false;
+
+      uint gainPerUser = user.clientBalance / nbActiveUsers; // his collateral is redistributed to active users
+
+      for (uint i=0; i<fbUsers.length; i++) {
+        if (fbUserStructs[fbUsers[i]].activeContract == true) {
+          fbUserStructs[fbUsers[i]].clientBalance += gainPerUser;
+        }
+      }
+
+      user.clientBalance = 0;
+      // We decrement this number after redistributing so we don't risk a division by 0
+      // The contract therefore always keep "one fraction" of the redistribution to itself
+      nbActiveUsers--;
+    } else if (block.timestamp >= user.clientEndAt) { // contract is over
+      user.clientAddress.transfer(user.clientBalance); // he gets his balance back
+      user.activeContract = false;
+      nbActiveUsers--;
     }
   }
 }

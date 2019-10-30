@@ -14,9 +14,7 @@ module.exports = {
       network_id: '*',
     },
     live: {
-      provider: () => {
-        return new HDWalletProvider(private_keys, process.env.RPC_URL, 0, 3)
-      },
+      provider: new HDWalletProvider(private_keys, process.env.RPC_URL, 0, 3),
       network_id: '3',
     },
   },

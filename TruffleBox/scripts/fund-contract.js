@@ -8,7 +8,7 @@ const LinkToken = artifacts.require('LinkToken')
   can be retrieved by calling the withdrawLink() function.
 */
 
-const payment = '2000000000000000000'
+const payment = '4000000000000000000'
 
 module.exports = async callback => {
   const mc = await InactivityContract.deployed()
