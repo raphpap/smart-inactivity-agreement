@@ -2,7 +2,7 @@
 
 Here is the spec of the job that must be created in the Operator's Portal in order to fetch a user's last activity from the Node Adapter.
 
-*Beforehand, you must have created a new bridge, named `fbexternaladapter`, pointing towards the deployed `Node Adapter`.
+*Beforehand, you must have created a new bridge, named `fbexternaladapter`, pointing towards the deployed `External Adapter`.
 
 
 ```
@@ -11,7 +11,7 @@ Here is the spec of the job that must be created in the Operator's Portal in ord
 		{
 			"type": "runlog",
 			"params": {
-				"address": "<<insert your ORACLE_ADDRESS>>"
+				"address": "<<insert your DEPLOYED_ORACLE_ADDRESS>>"
 			}
 		}
 	],

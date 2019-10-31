@@ -33,3 +33,6 @@ Upload to AWS/GCP
   - Key: `AES_KEY`
   - Value: <<replace with the same secret key that is used to encrypt the user's `FB_ACCESS_TOKEN`>>
 - Save
+
+# ENV
+Do not forget to add the env variable `AES_KEY` to your lambda, with the same value that is used to encrypt the Facebook access keys.

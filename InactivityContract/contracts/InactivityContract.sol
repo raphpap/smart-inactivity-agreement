@@ -131,7 +131,7 @@ contract InactivityContract is ChainlinkClient {
 
     if (_latestActivity > user.clientLatestSaved) { // user has more recent activity
       user.activeContract = false;
-
+      
       uint gainPerUser = user.clientBalance / nbActiveUsers; // his collateral is redistributed to active users
 
       for (uint i=0; i<fbUsers.length; i++) {
