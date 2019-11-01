@@ -14,6 +14,10 @@ module.exports = (deployer, network) => {
   } else {
     // For live networks, use the 0 address to allow the ChainlinkRegistry
     // contract automatically retrieve the correct address for you
-    deployer.deploy(InactivityContract, '0x0000000000000000000000000000000000000000', { value: 10000000000000000 })
+    deployer.deploy(
+      InactivityContract,
+      '0x0000000000000000000000000000000000000000',
+      { value: 10000000000000000 },
+    )
   }
 }

@@ -7,6 +7,7 @@
     "console:dev": "npx truffle console --network cldev",
     "console:live": "npx truffle console --network live",
     "depcheck": "echo '@chainlink/box' && depcheck --ignore-dirs=build/contracts || true",
+    "dev": "lite-server",
     "eslint": "eslint --ext .js,.ts test scripts",
     "solhint": "solhint ./contracts/**/*.sol",
     "lint": "yarn eslint && yarn solhint",
@@ -26,13 +27,25 @@
   "devDependencies": {
     "@chainlink/eslint-config": "0.0.1",
     "@chainlink/prettier-config": "0.0.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^3.2.0",
     "depcheck": "^0.8.3",
     "eslint": "^6.3.0",
+    "json-loader": "^0.5.7",
+    "lite-server": "^2.3.0",
     "prettier": "^1.18.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "solc": "0.4.24",
     "solhint": "^2.1.0",
+    "style-loader": "^1.0.0",
     "truffle": "^5.0.25",
-    "truffle-hdwallet-provider": "^1.0.8"
+    "truffle-hdwallet-provider": "^1.0.8",
+    "web3": "^0.20.0",
+    "webpack": "^4.41.2"
   },
   "prettier": "@chainlink/prettier-config"
 }

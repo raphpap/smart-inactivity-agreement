@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>The Anti-Social Social Challenge</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h1 class="text-center">The Anti-Social Social Challenge</h1>
+          <hr/>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h5 class="text-center">Unconsciously addicted to social networks? Don't worry, we all are. Fear not! The Anti-Social Social Challenge is here to incentivize us all to tone it down a notch. Ever got paid to do nothing?</h5>
+          <br/>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+          <div class="panel panel-default panel-fbuser">
+            <div class="panel-heading">
+              <div>
+                Number of current active users: <span id="nbActiveUsers">n/a</span>
+              </div>
+              <div>
+                Contract balance: <span id="contract-balance">n/a</span>: ETH
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+
+      <div id="fbUser" class="row d-flex justify-content-center">
+        <div class="col-md-3"></div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+          <div class="panel panel-default panel-fbuser">
+            <div class="panel-heading">
+              <div class="form-group">
+                <label for="fbIdInput">Facebook user id</label>
+                <div class="row p-3">
+                  <div class="col-sm-9 col-md-9 col-lg-9">
+                    <input type="text" class="form-control" id="fbIdInput" aria-describedby="fbIdInputHelp" placeholder="Enter you facebook ID">
+                  </div>
+                  <div class="col-sm-2 col-md-2 col-lg-2 align-middle">
+                    <button class="btn btn-default btn-search" type="button">Search user</button>
+                  </div>
+                </div>
+                <small id="fbIdInputHelp" class="form-text text-muted">Use <a href="https://developers.facebook.com/tools/explorer">this page</a> if you need help finding it</small>
+              </div>
+
+              <div class="form-group">
+                <label for="fbTokenInput">Facebook user access token</label>
+                <div class="row p-3">
+                  <div class="col-sm-7 col-md-7 col-lg-7">
+                    <input type="text" class="form-control" id="fbTokenInput" aria-describedby="fbTokenInputHelp" placeholder="Enter your access token">
+                  </div>
+                  <div class="col-sm-2 col-md-2 col-lg-2 align-middle">
+                    <button class="btn btn-default btn-register" type="button">Register</button>
+                  </div>
+                  <div class="col-sm-2 col-md-2 col-lg-2 align-middle">
+                    <button class="btn btn-default btn-update" type="button">Update</button>
+                  </div>
+                </div>
+                <small id="fbTokenInputHelp" class="form-text text-muted">Use <a href="https://developers.facebook.com/tools/explorer">this page</a> to generate a token granting access to your posts</small>
+              </div>
+            </div>
+            <div class="panel-body">
+              <strong>Is registered</strong>: <span class="user-exists">n/a</span><br/>
+              <strong>Balance</strong>: <span class="user-balance">n/a</span> ETH<br/>
+              <strong>End at</strong>: <span class="user-endat">n/a</span><br/>
+              <strong>Latest activity</strong>: <span class="user-latest">n/a</span><br/>
+              <strong>Active</strong>: <span class="user-active">n/a</span><br/><br/>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-push-2">
+          <h3>How does this work?</h3>
+          <p>The goal of the Anti-Social Social Challenge is to incentivize people to reduce their usage of social platforms by going cold-turkey on Facebook for a month.</p>
+          <p>For starters, users wanting to participate to the challenge will need to grant access to some of their information (posts, likes, photos and videos) to a Facebook Application. Afterwards, using blockchain technology along with Chainlink, they will need to register to a Smart-Inactivity-Contract by sending their info and a collateral (in the form of Ethereum).</p>
+          <p>The contract will then pull their current latest activity on the platform. The challenge is now to stay inactive for a month. If the user either posts, likes, or publish a photo or video, his balance is redistributed equally to all other users actively registered in the contract. However, if after a whole month, his current latest activity hasn't changed, the user will get back his collateral plus any redistributions he was part of.</p>
+          <br/>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <script src="js/crypto-js.min.js"></script>
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

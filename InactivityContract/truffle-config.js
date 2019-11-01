@@ -3,8 +3,8 @@ const HDWalletProvider = require('truffle-hdwallet-provider')
 const private_keys = [
   process.env.CONTRACT_OWNER_PK,
   process.env.CLIENT_1_PK,
-  process.env.CLIENT_2_PK
-];
+  process.env.CLIENT_2_PK,
+]
 
 module.exports = {
   networks: {

@@ -14,7 +14,7 @@ Don't forget to share about the challenge before registering! The more people re
 
 # Future Development
 ## Dapp and Facebook access granting backend
-The next step would be to create a Dapp that interacts directly with the contract instead of using the console. Before registering and sending ETH, the user would need to grant a Facebook App the access to some of his Facebook profile's info through a backend that would simply encrypt the user's access token using an AES_KEY. The Dapp would then allow the user to send his facebook id, encrypted access key, and some ETH, to register to the contract. Since it's possible to get a user access token with a valid duration of a month, we won't have an issue for a one-month challenge.
+The next step would be to finalize the Dapp to not use the Facebook Graph Api Explorer Tool. Before registering and sending ETH, the user would need to grant a Facebook App the access to some of his Facebook profile's info through a backend that would simply encrypt the user's access token using an AES_KEY. The Dapp would then allow the user to send his facebook id, encrypted access key, and some ETH, to register to the contract. Since it's possible to get a user access token with a valid duration of a month, we won't have an issue for a one-month challenge.
 
 ## Mupliple payment methods
 Ideally, the user would have more than one way to fund the contract and all users would need to deposit the same cash value of collateral.

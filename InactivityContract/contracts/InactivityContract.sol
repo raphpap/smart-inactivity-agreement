@@ -3,15 +3,13 @@ pragma solidity 0.4.24;
 import "chainlink/contracts/ChainlinkClient.sol";
 
 contract InactivityContract is ChainlinkClient {
-  address ORACLE = 0xa1de4e226648c15f4bd514219f054aafee4b78d8;
-  bytes32 JOB_ID = 0x3935316435306135643430383462666539613664623830373730626639666564;
+  //address ORACLE = 0xa1de4e226648c15f4bd514219f054aafee4b78d8;
+  //bytes32 JOB_ID = 0x3935316435306135643430383462666539613664623830373730626639666564;
+  address ORACLE = 0xd59fe7bb8307601b91aa703e20ff6b12141f2c3e;
+  bytes32 JOB_ID = 0x3430643865383162613931653461623762383039633630313439363332316261;
   uint256 PAYMENT = 1000000000000000000;
 
-  address constant public outgoingAddress = 0x31DAF11283dba5DB6029f465924e1528dFf35c5f;
-
   struct FbUser {
-    string clientFbId;
-    string encryptedFbAccessToken;
     address clientAddress;
     uint256 clientBalance;
     uint256 clientEndAt;
@@ -29,13 +27,22 @@ contract InactivityContract is ChainlinkClient {
   // Mapping of clientFbId => FbUser
   mapping (string => FbUser) fbUserStructs;
 
+  // Accessor to a single user
+  function getFbUser(string clientFbId) public view returns(bool, uint256, uint256, uint256, bool) {
+    FbUser u = fbUserStructs[clientFbId];
+    return (u.exists, u.clientBalance, u.clientEndAt, u.clientLatestSaved, u.activeContract);
+  }
+
+  // Accessor to a single user
+  function getContractBalance() public view returns(uint256) {
+    return address(this).balance;
+  }
+
   function createFbUser(
     string clientFbId,
-    string encryptedFbAccessToken,
     address clientAddress,
     uint clientBalance
   ) private {
-    fbUserStructs[clientFbId].encryptedFbAccessToken = encryptedFbAccessToken;
     fbUserStructs[clientFbId].clientAddress = clientAddress;
     fbUserStructs[clientFbId].clientBalance = clientBalance;
     fbUserStructs[clientFbId].activeContract = false;
@@ -76,7 +83,6 @@ contract InactivityContract is ChainlinkClient {
 
     createFbUser(
       _clientFbId,
-      _encryptedFbAccessToken,
       msg.sender,
       msg.value
     );
@@ -101,18 +107,20 @@ contract InactivityContract is ChainlinkClient {
   }
 
   function updateUser(
-    string _clientFbId
+    string _clientFbId,
+    string _encryptedFbAccessToken
   )
     public
     returns (bytes32 requestId)
   {
     FbUser user = fbUserStructs[_clientFbId];
     require(user.exists == true);
+    require(user.activeContract == true);
 
     Chainlink.Request memory req = buildChainlinkRequest(JOB_ID, this, this.fulfillUpdate.selector);
     req.add("copyPath", "latest");
     req.add("clientId", _clientFbId);
-    req.add("encryptedAccessToken", user.encryptedFbAccessToken);
+    req.add("encryptedAccessToken", _encryptedFbAccessToken);
 
     requestId = sendChainlinkRequestTo(ORACLE, req, PAYMENT);
     clientFbIdForRequestId[requestId] = _clientFbId;
@@ -131,7 +139,7 @@ contract InactivityContract is ChainlinkClient {
 
     if (_latestActivity > user.clientLatestSaved) { // user has more recent activity
       user.activeContract = false;
-      
+
       uint gainPerUser = user.clientBalance / nbActiveUsers; // his collateral is redistributed to active users
 
       for (uint i=0; i<fbUsers.length; i++) {

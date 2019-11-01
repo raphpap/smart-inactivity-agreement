@@ -4,7 +4,6 @@
 
 See `.env.example` and read carefully to create your `.env` file by following the directions correctly
 
-
 ## Requirements
 
 - NPM
@@ -57,6 +56,7 @@ npx truffle exec scripts/update-client-1.js --network live
 ```
 
 # Note
+
 To avoir a possible division by 0, a user's balance is divided by the number of other active users in the contract + 1.
 
 Therefore, the contract itself keeps a part of every occuring redistribution (equal to that of other users)
