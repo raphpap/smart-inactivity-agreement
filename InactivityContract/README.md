@@ -45,18 +45,30 @@ nv .env npx truffle exec scripts/register-client-2.js --network live
 Updating state of the first user’s state in the contract
 If he has more recent activity, his balance is redistributed
 
-npx truffle exec scripts/update-client-1.js --network live
+nv .env npx truffle exec scripts/update-client-1.js --network live
 ```
 
 ```bash
 Updating state of the second user’s state in the contract
 If he has more recent activity, his balance is redistributed
 
-npx truffle exec scripts/update-client-1.js --network live
+nv .env npx truffle exec scripts/update-client-1.js --network live
+```
+
+```bash
+Read number of active users in the contract
+
+nv .env npx truffle exec scripts/read-contract.js --network live
+```
+
+```bash
+Read number of active users in the contract
+
+nv .env npx truffle exec scripts/read-fbuser.js --network live
 ```
 
 # Note
 
-To avoir a possible division by 0, a user's balance is divided by the number of other active users in the contract + 1.
+To avoid a possible division by 0, a user's balance is divided by the number of other active users in the contract + 1.
 
 Therefore, the contract itself keeps a part of every occuring redistribution (equal to that of other users)

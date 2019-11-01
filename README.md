@@ -42,6 +42,8 @@ To run the project, you will need to:
     - Add the [JobSpec](./JobSpec/README.md) of this project to your Node
 - Deploy and use the `InactivityContract`
     - Follow the steps in the [README of InactivityContract](./InactivityContract/README.md)
+- Deploy and use the `Dapp`
+    - Follow the steps in the [README of InactivityContract/dapp-src](./InactivityContract/dapp-src/README.md)
 
 ## Thanks
 Many thanks to all those of [the Chainlink Discord Server](https://discord.gg/9nrz6y8) who supported us during the Hackathon.
