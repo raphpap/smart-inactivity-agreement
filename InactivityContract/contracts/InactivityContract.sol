@@ -155,6 +155,7 @@ contract InactivityContract is ChainlinkClient {
     } else if (block.timestamp >= user.clientEndAt) { // contract is over
       user.clientAddress.transfer(user.clientBalance); // he gets his balance back
       user.activeContract = false;
+      user.clientBalance = 0;
       nbActiveUsers--;
     }
   }
