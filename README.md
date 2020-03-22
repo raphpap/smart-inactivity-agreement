@@ -17,7 +17,10 @@ Don't forget to share about the challenge before registering! The more people re
 *Make sure that you have [Metamask](https://metamask.io/) installed in your browser*
 
 Website: https://anti-social-social-challenge.s3.amazonaws.com/index.html
+
 Ethereum contract address: https://ropsten.etherscan.io/address/0x89ffaff8c9414cdbff0dc078bd6ae4964298fc0a
+
+![Screenshot](https://user-images.githubusercontent.com/14226032/77242666-29b3a080-6bd7-11ea-8e9e-da15feee716b.png)
 
 # Future Development
 ## Dapp and Facebook access granting backend
