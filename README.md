@@ -6,11 +6,18 @@ Unconsciously addicted to social networks? Don't worry, we all are. Fear not! Th
 # Description
 The goal of the Anti-Social Social Challenge is to incentivize people to reduce their usage of social platforms by going cold-turkey on Facebook for a month.
 
-For starters, users wanting to participate to the challenge will need to grant access to some of their information (posts, likes, photos and videos) to a Facebook Application. Afterwards, using blockchain technology along with Chainlink, they will need to register to a Smart-Inactivity-Contract by sending their info and a collateral (in the form of Ethereum).
+For starters, users wanting to participate to the challenge will need to grant access to some of their information (posts, likes, photos and videos) to a Facebook Application. Afterwards, using the Ethereum blockchain along with the Chainlink oracle network, they will need to register to a Smart-Inactivity-Contract by sending their info and a collateral (in the form of Ethereum).
 
 The contract will then pull their current latest activity on the platform. The challenge is now to stay inactive for a month. If the user either posts, likes, or publish a photo or video, his balance is redistributed equally to all other users actively registered in the contract. However, if after a whole month, his current latest activity hasn't changed, the user will get back his collateral plus any redistributions he was part of.
 
 Don't forget to share about the challenge before registering! The more people registered, the more redistributions you might get!
+
+# Demo
+
+*Make sure that you have [Metamask](https://metamask.io/) installed in your browser*
+
+Website: https://anti-social-social-challenge.s3.amazonaws.com/index.html
+Ethereum contract address: https://ropsten.etherscan.io/address/0x89ffaff8c9414cdbff0dc078bd6ae4964298fc0a
 
 # Future Development
 ## Dapp and Facebook access granting backend
